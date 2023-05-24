@@ -12,7 +12,7 @@
 # Definición de variables
 # -----------------------
 
-USE="USE: analyzer.sh FOLDER example ~/Desarrollo/MasterIIUPO/TFM/ResultadosComparativas/ComparativaDatasetsWeka/CSV"
+USE="USE: analyzer.sh FOLDER example ~/Desarrollo/MasterIIUPO/TFM/ResultadosComparativas/ComparativaDatasetsWeka/CSV RESULTS /var/tmp/results.csv"
 
 ARRAY_RF_ACCURACY=""
 ARRAY_RFMSU_ACCURACY="" 
@@ -58,7 +58,9 @@ do
     RF_LEAVES=$(echo $RF_LEAVES | sed "s/\,/./")
     RFMSU_LEAVES=$(echo $RFMSU_LEAVES | sed "s/\,/./")
 
-    printf "$CSV_FILE;$RFMSU_ACCURACY;$RF_ACCURACY;$RFMSU_FEATS;$RF_FEATS;$RFMSU_LEAVES;$RF_LEAVES\n" >> $2
+    DATASET=$(echo $CSV_FILE | sed "s/\.[0-9]*_[0-9]*.csv//g")
+
+    printf "$DATASET;$RFMSU_ACCURACY;$RF_ACCURACY;$RFMSU_FEATS;$RF_FEATS;$RFMSU_LEAVES;$RF_LEAVES\n" >> $2
 
     if [[ $IS_FIRST -eq 1 ]];
     then
@@ -79,6 +81,30 @@ do
     fi
 done
 
+# -----------------------------
+# Proceso de medias aritméticas
+# -----------------------------
+
+read MEAN_RF_ACCURACY < \
+    <(Rscript mean.R "$ARRAY_RF_ACCURACY")
+
+read MEAN_RFMSU_ACCURACY < \
+    <(Rscript mean.R "$ARRAY_RFMSU_ACCURACY")
+
+read MEAN_RF_FEATS < \
+    <(Rscript mean.R "$ARRAY_RF_FEATS")
+
+read MEAN_RFMSU_FEATS < \
+    <(Rscript mean.R "$ARRAY_RFMSU_FEATS")
+
+read MEAN_RF_LEAVES < \
+    <(Rscript mean.R "$ARRAY_RF_LEAVES")
+
+read MEAN_RFMSU_LEAVES < \
+    <(Rscript mean.R "$ARRAY_RFMSU_LEAVES")
+
+printf "mean;$MEAN_RFMSU_ACCURACY;$MEAN_RF_ACCURACY;$MEAN_RFMSU_FEATS;$MEAN_RF_FEATS;$MEAN_RFMSU_LEAVES;$MEAN_RF_LEAVES\n" >> $2 
+
 # -------------------------------------
 # Proceso del Wilcoxon signed rank test
 # -------------------------------------
@@ -93,3 +119,5 @@ read WX_LEAVES < \
     <(Rscript wilcoxon_signed_rank_test.R "$ARRAY_RF_LEAVES" "$ARRAY_RFMSU_LEAVES")
 
 printf "p-val;;$WX_ACCURACY;;$WX_FEATS;;$WX_LEAVES\n" >> $2
+
+printf "Results saved on $2\n"

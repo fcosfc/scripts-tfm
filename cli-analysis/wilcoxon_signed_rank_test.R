@@ -1,4 +1,11 @@
 #!/usr/bin/env Rscript
+#
+# ------------------------------------------------------------------------------
+# wilcoxon_signed_rank_test.R: script para cálculo del Wilcoxon Signed Rank Test
+#
+# author: Paco Saucedo.
+# ------------------------------------------------------------------------------
+
 args = commandArgs(trailingOnly=TRUE)
 if (length(args) == 2) {
   v1 <- sapply(as.data.frame(strsplit(args[1], ",")), as.numeric)
