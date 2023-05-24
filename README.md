@@ -5,11 +5,14 @@ Trabajo Fin de Máster. \
 Alumno [Francisco Saucedo](https://www.linkedin.com/in/franciscosaucedo/). \
 [Máster Universitario en Ingeniería Informática](https://www.upo.es/postgrado/Master-Oficial-Ingenieria-Informatica/). \
 [Universidad Pablo de Olavide](https://www.upo.es). \
-**Scripts auxiliares**
+
+## Introducción
+
+Scripts auxiliares para análisis de resultados durante la experimentación realizada en el Trabajo Fin de Máster.
 
 ## Requisito
 
-[Fork del repositorio Weka creado durante el TFM](https://github.com/fcosfc/weka)
+[Fork del repositorio Weka creado durante el Trabajo Fin de Máster](https://github.com/fcosfc/weka)
 
 ## Uso
 
