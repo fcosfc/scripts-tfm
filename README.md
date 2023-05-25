@@ -4,7 +4,7 @@
 Trabajo Fin de Máster. \
 Alumno [Francisco Saucedo](https://www.linkedin.com/in/franciscosaucedo/). \
 [Máster Universitario en Ingeniería Informática](https://www.upo.es/postgrado/Master-Oficial-Ingenieria-Informatica/). \
-[Universidad Pablo de Olavide](https://www.upo.es). \
+[Universidad Pablo de Olavide](https://www.upo.es).
 
 ## Introducción
 
@@ -31,4 +31,22 @@ cli-weka/msu.sh
 
 ```
 cli-weka/msu.sh weather.nominal ../weka-stable-3-8/wekadocs/data
+```
+
+### Utilidad de análisis de datos de comparativas
+
+Permite analizar las métricas que residen en los ficheros CSV generados con la utilidad anterior, con el objetivo de obtener conclusiones sobre si merece la pena la propuesta de uso de MSU realizada en el TFM.
+
+* Obtener ayuda
+```
+cd cli-analysis
+
+./analyzer.sh 
+```
+
+* Ejemplo sobre una carpeta de resultados generados a partir de los ejemplos de la instalación de Weka
+```
+cd cli-analysis
+
+./analyzer.sh ~/Desarrollo/MasterIIUPO/TFM/ResultadosComparativas/ComparativaDatasetsWeka/CSV /var/tmp/results.CSV
 ```

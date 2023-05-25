@@ -12,7 +12,7 @@
 # Definición de variables
 # -----------------------
 
-USE="USE: analyzer.sh FOLDER example ~/Desarrollo/MasterIIUPO/TFM/ResultadosComparativas/ComparativaDatasetsWeka/CSV RESULTS /var/tmp/results.csv"
+USE="USE: analyzer.sh FOLDER example ~/Desarrollo/MasterIIUPO/TFM/ResultadosComparativas/ComparativaDatasetsWeka/CSV RESULTS example /var/tmp/results.csv"
 
 ARRAY_RF_ACCURACY=""
 ARRAY_RFMSU_ACCURACY="" 
@@ -38,9 +38,12 @@ then
     exit
 fi
 
+printf "Processing folder $1 ...\n"
+
 # ------------------------------------------------
 # Proceso de los ficheros de la carpeta de entrada
 # ------------------------------------------------
+
 printf ";acc;;#Feats;;#Leaves;\n" > $2
 printf "Id.;RFMSU;RF;RFMSU;RF;RFMSU;RF\n" >> $2
 
@@ -48,19 +51,15 @@ CSV_FILES=($(ls $1))
 
 for CSV_FILE in ${CSV_FILES[@]}
 do
+    printf "Processing file $CSV_FILE ...\n"
+
+    # Extrae métricas desde el fichero CSV resultado de un procesamiento previo con Weka
     read RF_ACCURACY RFMSU_ACCURACY RF_FEATS RFMSU_FEATS RF_LEAVES RFMSU_LEAVES < \
         <(awk -f data_extractor.awk $1/$CSV_FILE)
 
+    # Conversión de formato decimal y creación de arrays de datos para medias y tests
     RF_ACCURACY=$(echo $RF_ACCURACY | sed "s/\,/./")
     RFMSU_ACCURACY=$(echo $RFMSU_ACCURACY | sed "s/\,/./")
-    RF_FEATS=$(echo $RF_FEATS | sed "s/\,/./")
-    RFMSU_FEATS=$(echo $RFMSU_FEATS | sed "s/\,/./")
-    RF_LEAVES=$(echo $RF_LEAVES | sed "s/\,/./")
-    RFMSU_LEAVES=$(echo $RFMSU_LEAVES | sed "s/\,/./")
-
-    DATASET=$(echo $CSV_FILE | sed "s/\.[0-9]*_[0-9]*.csv//g")
-
-    printf "$DATASET;$RFMSU_ACCURACY;$RF_ACCURACY;$RFMSU_FEATS;$RF_FEATS;$RFMSU_LEAVES;$RF_LEAVES\n" >> $2
 
     if [[ $IS_FIRST -eq 1 ]];
     then
@@ -79,6 +78,14 @@ do
         ARRAY_RF_LEAVES=$(echo $ARRAY_RF_LEAVES "," $RF_LEAVES)
         ARRAY_RFMSU_LEAVES=$(echo $ARRAY_RFMSU_LEAVES "," $RFMSU_LEAVES)
     fi
+
+    # Conversión de vuelta para España y escritura de CSV, extrayendo el dataset origen del nombre del fichero
+    RF_ACCURACY=$(echo $RF_ACCURACY | sed "s/\./,/")
+    RFMSU_ACCURACY=$(echo $RFMSU_ACCURACY | sed "s/\./,/")
+
+    DATASET=$(echo $CSV_FILE | sed "s/\.[0-9]*_[0-9]*.csv//g")
+
+    printf "$DATASET;$RFMSU_ACCURACY;$RF_ACCURACY;$RFMSU_FEATS;$RF_FEATS;$RFMSU_LEAVES;$RF_LEAVES\n" >> $2
 done
 
 # -----------------------------
@@ -103,6 +110,13 @@ read MEAN_RF_LEAVES < \
 read MEAN_RFMSU_LEAVES < \
     <(Rscript mean.R "$ARRAY_RFMSU_LEAVES")
 
+MEAN_RF_ACCURACY=$(echo $MEAN_RF_ACCURACY | sed "s/\./,/")
+MEAN_RFMSU_ACCURACY=$(echo $MEAN_RFMSU_ACCURACY | sed "s/\./,/")
+MEAN_RF_FEATS=$(echo $MEAN_RF_FEATS | sed "s/\./,/")
+MEAN_RFMSU_FEATS=$(echo $MEAN_RFMSU_FEATS | sed "s/\./,/")
+MEAN_RF_LEAVES=$(echo $MEAN_RF_LEAVES | sed "s/\./,/")
+MEAN_RFMSU_LEAVES=$(echo $MEAN_RFMSU_LEAVES | sed "s/\./,/")
+
 printf "mean;$MEAN_RFMSU_ACCURACY;$MEAN_RF_ACCURACY;$MEAN_RFMSU_FEATS;$MEAN_RF_FEATS;$MEAN_RFMSU_LEAVES;$MEAN_RF_LEAVES\n" >> $2 
 
 # -------------------------------------
@@ -117,6 +131,10 @@ read WX_FEATS < \
 
 read WX_LEAVES < \
     <(Rscript wilcoxon_signed_rank_test.R "$ARRAY_RF_LEAVES" "$ARRAY_RFMSU_LEAVES")
+
+WX_ACCURACY=$(echo $WX_ACCURACY | sed "s/\./,/")
+WX_FEATS=$(echo $WX_FEATS | sed "s/\./,/")
+WX_LEAVES=$(echo $WX_LEAVES | sed "s/\./,/")
 
 printf "p-val;;$WX_ACCURACY;;$WX_FEATS;;$WX_LEAVES\n" >> $2
 
