@@ -50,3 +50,21 @@ cd cli-analysis
 
 ./analyzer_rf.sh ~/Desarrollo/MasterIIUPO/TFM/ResultadosComparativas/ComparativaDatasetsWeka/CSV /var/tmp/results.CSV
 ```
+
+### Utilidad de análisis de datos de comparativas Random Forests MSU - J48 - Naive Bayes
+
+Permite analizar las métricas que residen en los ficheros CSV generados con la utilidad anterior, con el objetivo de obtener conclusiones sobre el rendimiento con otros algoritmos.
+
+* Obtener ayuda
+```
+cd cli-analysis
+
+./analyzer_other.sh 
+```
+
+* Ejemplo sobre una carpeta de resultados generados a partir de los ejemplos de la instalación de Weka
+```
+cd cli-analysis
+
+./analyzer_other.sh ~/Desarrollo/MasterIIUPO/TFM/ResultadosComparativas/ComparativaDatasetsWeka/CSV /var/tmp/results.CSV
+```
