@@ -33,7 +33,7 @@ cli-weka/msu.sh
 cli-weka/msu.sh weather.nominal ../weka-stable-3-8/wekadocs/data
 ```
 
-### Utilidad de análisis de datos de comparativas
+### Utilidad de análisis de datos de comparativas sobre Random Forests
 
 Permite analizar las métricas que residen en los ficheros CSV generados con la utilidad anterior, con el objetivo de obtener conclusiones sobre si merece la pena la propuesta de uso de MSU realizada en el TFM.
 
@@ -41,12 +41,12 @@ Permite analizar las métricas que residen en los ficheros CSV generados con la 
 ```
 cd cli-analysis
 
-./analyzer.sh 
+./analyzer_rf.sh 
 ```
 
 * Ejemplo sobre una carpeta de resultados generados a partir de los ejemplos de la instalación de Weka
 ```
 cd cli-analysis
 
-./analyzer.sh ~/Desarrollo/MasterIIUPO/TFM/ResultadosComparativas/ComparativaDatasetsWeka/CSV /var/tmp/results.CSV
+./analyzer_rf.sh ~/Desarrollo/MasterIIUPO/TFM/ResultadosComparativas/ComparativaDatasetsWeka/CSV /var/tmp/results.CSV
 ```

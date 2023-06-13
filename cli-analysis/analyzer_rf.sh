@@ -1,18 +1,18 @@
 #!/bin/bash
 #
-# --------------------------------------------------------------------------------------------
-# analyzer.sh: script que extrae métricas de ficheros CSV resultado de ejecución de weka,
-#              las analiza utilizando el Wilcoxon Signed-Rank Test y crea un tabla comparativa
-#              para la memoria del TFM.
+# ----------------------------------------------------------------------------------------------------------------
+# analyzer_rf.sh: script que extrae métricas de Random Forests de los ficheros CSV resultado de ejecución de weka,
+#                 las analiza utilizando el Wilcoxon Signed-Rank Test y crea un tabla comparativa
+#                 para la memoria del TFM.
 #
 # author: Paco Saucedo.
-# --------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------
 
 # -----------------------
 # Definición de variables
 # -----------------------
 
-USE="USE: analyzer.sh FOLDER example ~/Desarrollo/MasterIIUPO/TFM/ResultadosComparativas/ComparativaDatasetsWeka/CSV RESULTS example /var/tmp/results.csv"
+USE="USE: analyzer_rf.sh FOLDER example ~/Desarrollo/MasterIIUPO/TFM/ResultadosComparativas/ComparativaDatasetsWeka/CSV RESULTS example /var/tmp/results.csv"
 
 ARRAY_RF_ACCURACY=""
 ARRAY_RFMSU_ACCURACY="" 
@@ -55,7 +55,7 @@ do
 
     # Extrae métricas desde el fichero CSV resultado de un procesamiento previo con Weka
     read RF_ACCURACY RFMSU_ACCURACY RF_FEATS RFMSU_FEATS RF_LEAVES RFMSU_LEAVES < \
-        <(awk -f data_extractor.awk $1/$CSV_FILE)
+        <(awk -f data_extractor_rf.awk $1/$CSV_FILE)
 
     # Conversión de formato decimal y creación de arrays de datos para medias y tests
     RF_ACCURACY=$(echo $RF_ACCURACY | sed "s/\,/./")

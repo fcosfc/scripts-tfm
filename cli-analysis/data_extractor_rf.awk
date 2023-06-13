@@ -1,9 +1,9 @@
-# -----------------------------------------------------------------------------------
-# data_extractor.awk: Extrae métricas de ficheros CSV resultado de ejecución de weka,
-#                     para tablas comparativas de la memoria del TFM. 
+# ------------------------------------------------------------------------------------------------------------
+# data_extractor_rf.awk: Extrae métricas de Random Forests de los ficheros CSV resultado de ejecución de weka,
+#                        para tablas comparativas de la memoria del TFM. 
 #
 # author: Paco Saucedo.
-# -----------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------
 
 BEGIN {
     FS = ";"
